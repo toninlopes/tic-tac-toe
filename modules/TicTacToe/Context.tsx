@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 
 import { EMPTY_BOARD } from "./constants";
 import { Board, Move, Player, Victory } from "./types";
@@ -29,6 +29,13 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
     () => Victory.evaluateGame({ board, players }),
     [board, players]
   );
+  /**
+   * Checks whether the game can have the last move undone or not.
+   */
+  const canUndo = useMemo(
+    () => moves.length !== 0 && moves.length !== 9 && victory === null,
+    [moves, victory]
+  );
 
   const resetGame = () => {
     setMoves([]);
@@ -36,64 +43,62 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
     setCurrentPlayer(players[0]);
   };
 
-  const handleMove = (row: Board["Ordinal"], column: Board["Ordinal"]) => {
-    setMoves((prevMoves) => [
-      ...prevMoves,
+  const handleMove = useCallback(
+    (row: Board["Ordinal"], column: Board["Ordinal"]) => {
+      setMoves((prevMoves) => [
+        ...prevMoves,
 
-      new Move(
-        currentPlayer.id,
-        currentPlayer.symbol,
-        [row, column],
-        new Date()
-      ),
-    ]);
+        new Move(
+          currentPlayer.id,
+          currentPlayer.symbol,
+          [row, column],
+          new Date()
+        ),
+      ]);
 
-    setBoard((prevBoard) => {
-      const newBoard = [...prevBoard];
-      newBoard[row][column] = currentPlayer.symbol;
-      return newBoard;
-    });
+      setBoard((prevBoard) => {
+        const newBoard = [...prevBoard];
+        newBoard[row][column] = currentPlayer.symbol;
+        return newBoard;
+      });
 
-    setCurrentPlayer((p) => (
-      players.nextOrFirst && players.nextOrFirst(p)) || players[p.id === players[0].id ? 1 : 0],
-    );
-  };
+      setCurrentPlayer((p) => (
+        players.nextOrFirst && players.nextOrFirst(p)) || players[p.id === players[0].id ? 1 : 0],
+      );
+    },
+    [moves, board, currentPlayer]
+  );
 
   /**
    * Undo the last move.
    */
-  const undoLastMove = () => {
+  const undoLastMove = useCallback(
+    () => {
+      setMoves((previousMoves) => {
+        const allMoves = [...previousMoves]
+        const lastMove = allMoves.pop();
+        if (!lastMove) {
+          return previousMoves;
+        }
 
-    setBoard((prevBoard) => {
-      const newBoard = [...prevBoard];
+        const [row, column] = lastMove.coordinates;
 
-      const lastMove = moves.pop();
-      if (lastMove) {
-        const row = lastMove.coordinates[0];
-        const column = lastMove.coordinates[1];
-        newBoard[row][column] = null;
-      }
-      return newBoard;
-    });
+        setBoard((prevBoard) => {
+          const newBoard = [...prevBoard];
+          newBoard[row][column] = null;
+          return newBoard;
+        });
 
+        setCurrentPlayer((p) => (
+          players.nextOrFirst && players.nextOrFirst(p)) || players[p.id === players[0].id ? 1 : 0],
+        );
 
+        return allMoves;
+      });
 
-    setMoves((previousMoves) => {
-      const allMoves = [...previousMoves];
-      allMoves.pop();
-      return [...allMoves];
-    });
-
-
-    setCurrentPlayer((p) => (
-      players.nextOrFirst && players.nextOrFirst(p)) || players[p.id === players[0].id ? 1 : 0],
-    );
-  };
-
-  /**
-   * Checks whether the game can have the last move undone or not.
-   */
-  const canUndo = moves.length !== 0 && moves.length !== 9 && victory === null;
+    },
+    [moves]
+  );
 
   return (
     <TicTacToeContext.Provider

@@ -3,7 +3,7 @@ import { Board as BoardType } from "@/modules/TicTacToe/types";
 import { Button } from "@react-navigation/elements";
 import { useNavigation } from "expo-router";
 import { useContext, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Tile } from "./Tile";
 
 export function Board() {
@@ -29,7 +29,7 @@ export function Board() {
           <View key={rowIndex} style={styles.row}>
             {row.map((cell, cellIndex) => (
               <Tile
-                key={cellIndex}
+                key={`${rowIndex}-${cellIndex}`}
                 value={cell}
                 coordinates={[
                   rowIndex as BoardType["Ordinal"],
@@ -40,13 +40,13 @@ export function Board() {
           </View>
         ))}
       </View>
-      <Button
-        style={!canUndo && styles.disabledUndoButton}
+      <Pressable
+        style={[styles.undeButton, !canUndo && styles.disabledUndoButton] as StyleProp<ViewStyle>}
         disabled={!canUndo}
         onPress={undoLastMove}
       >
-        Undo
-      </Button>
+        <Text>Undo</Text>
+      </Pressable>
     </>
   );
 }
@@ -69,6 +69,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
+  },
+  undeButton: {
+    margin: 10,
+    padding: 8,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 10,
   },
   disabledUndoButton: {
     opacity: .4,
