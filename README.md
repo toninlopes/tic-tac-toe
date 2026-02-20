@@ -14,27 +14,18 @@ This is a React Native/Expo project implementing a basic Tic Tac Toe game. Your 
 ### Installation
 
 1. Install dependencies:
-
-   ```bash
+  ```bash
    npm install
-   ```
-
+  ```
 2. Start the development server:
-
-   ```bash
+  ```bash
    npx expo start
-   ```
-
+  ```
    Or use a development build:
-
-   ```
-   eas build:dev
-   ```
-
 3. Run on your preferred platform:
-   - Press `i` for iOS Simulator
-   - Press `a` for Android Emulator
-   - Scan the QR code with Expo Go app on your device
+  - Press `i` for iOS Simulator
+  - Press `a` for Android Emulator
+  - Scan the QR code with Expo Go app on your device
 
 ## Project Structure
 
@@ -75,7 +66,7 @@ Your delivery must be committed and pushed to the repository you were provided w
 
 You may add and extend types as you wish. If you set out to modify any types already provided, please write comments explaining your reasoning for doing so.
 
-### Show us what _you_ can do
+### Show us what *you* can do
 
 For all of these challenges, you are encouraged to write code yourself. You may install external packages, but you must provide your reasoning for each of them.
 
@@ -145,6 +136,8 @@ Write comprehensive tests for the game logic and components.
 - Test the `TicTacToeProvider` context behavior
 - Test the `Tile` component interactions
 - Achieve reasonable coverage of critical paths
+
+The official [Expo Unit Testing Documentation]([https://docs.expo.dev/develop/unit-testing/) was used to do this challenge.
 
 ---
 
@@ -255,7 +248,7 @@ Extract the game logic from `TicTacToeContext.tsx` into a custom hook (`useTicTa
 2. Commit your changes with clear, descriptive messages
 3. Push your branch and create a pull request
 4. Include in your PR description:
-   - Which challenge(s) you completed
-   - Any assumptions you made
+  - Which challenge(s) you completed
+  - Any assumptions you made
 
 Good luck!

@@ -52,7 +52,8 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
       return newBoard;
     });
 
-    setCurrentPlayer((p) => players.nextOrFirst(p));
+    setCurrentPlayer((p) => (
+      players.nextOrFirst && players.nextOrFirst(p)) || players[p.id === players[0].id ? 1 : 0]);
   };
 
   return (

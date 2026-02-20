@@ -16,8 +16,8 @@ export function Tile({ value = null, coordinates: [row, col] }: TileProps) {
     value === null
       ? "#e0e0e0"
       : victory?.evaluateTile([row, col])
-      ? "green"
-      : Colors.light.tint;
+        ? "green"
+        : Colors.light.tint;
 
   const handlePress = () => {
     if (!!value || !!victory) return;
@@ -30,7 +30,7 @@ export function Tile({ value = null, coordinates: [row, col] }: TileProps) {
       disabled={!!value || !!victory}
       style={{ ...styles.container, backgroundColor }}
     >
-      <ThemedText style={styles.text}>{value}</ThemedText>
+      <ThemedText style={styles.text}>{value || ''}</ThemedText>
     </Pressable>
   );
 }
