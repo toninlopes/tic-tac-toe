@@ -16,6 +16,8 @@ export const TicTacToeContext = createContext({
     row: Board["Ordinal"],
     column: Board["Ordinal"]
   ) => void,
+  undoLastMove: null! as () => void,
+  canUndo: null! as boolean,
 });
 
 export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
@@ -53,8 +55,45 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
     });
 
     setCurrentPlayer((p) => (
-      players.nextOrFirst && players.nextOrFirst(p)) || players[p.id === players[0].id ? 1 : 0]);
+      players.nextOrFirst && players.nextOrFirst(p)) || players[p.id === players[0].id ? 1 : 0],
+    );
   };
+
+  /**
+   * Undo the last move.
+   */
+  const undoLastMove = () => {
+
+    setBoard((prevBoard) => {
+      const newBoard = [...prevBoard];
+
+      const lastMove = moves.pop();
+      if (lastMove) {
+        const row = lastMove.coordinates[0];
+        const column = lastMove.coordinates[1];
+        newBoard[row][column] = null;
+      }
+      return newBoard;
+    });
+
+
+
+    setMoves((previousMoves) => {
+      const allMoves = [...previousMoves];
+      allMoves.pop();
+      return [...allMoves];
+    });
+
+
+    setCurrentPlayer((p) => (
+      players.nextOrFirst && players.nextOrFirst(p)) || players[p.id === players[0].id ? 1 : 0],
+    );
+  };
+
+  /**
+   * Checks whether the game can have the last move undone or not.
+   */
+  const canUndo = moves.length !== 0 && moves.length !== 9 && victory === null;
 
   return (
     <TicTacToeContext.Provider
@@ -66,6 +105,8 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
         handleMove,
         victory,
         resetGame,
+        undoLastMove,
+        canUndo,
       }}
     >
       {children}
