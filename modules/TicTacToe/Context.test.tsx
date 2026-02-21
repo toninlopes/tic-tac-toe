@@ -1,7 +1,31 @@
 import { act, fireEvent, render } from '@testing-library/react-native';
 import { useContext } from 'react';
 import { Button, Text, View } from 'react-native';
+import { EMPTY_BOARD } from './constants';
 import { TicTacToeContext, TicTacToeProvider } from './Context';
+import { Board, Move, Player, Victory } from './types';
+
+const players = [new Player("1", "X"), new Player("2", "O")] as const;
+
+export function createMockContextValue(overrides: {
+  victory?: Victory | null;
+  handleMove?: (row: 0 | 1 | 2, column: 0 | 1 | 2) => void;
+  moves?: Move[];
+  board?: Board["Value"],
+}) {
+  return {
+    currentPlayer: players[0],
+    board: EMPTY_BOARD(),
+    players,
+    canUndo: false,
+    moves: [],
+    victory: null as Victory | null,
+    resetGame: jest.fn(),
+    handleMove: jest.fn(),
+    undoLastMove: jest.fn(),
+    ...overrides,
+  };
+}
 
 const TestingComponent = () => {
   const { resetGame, victory, board, handleMove, undoLastMove, canUndo } = useContext(TicTacToeContext);
