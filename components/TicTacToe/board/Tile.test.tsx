@@ -1,29 +1,10 @@
 import { TicTacToe } from "@/modules";
-import { EMPTY_BOARD } from "@/modules/TicTacToe/constants";
+import { createMockContextValue } from "@/modules/TicTacToe/Context.test";
 import { Player, Victory } from "@/modules/TicTacToe/types";
 import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 import { Tile } from "./Tile";
 
-const players = [new Player("1", "X"), new Player("2", "O")] as const;
-
-function createMockContextValue(overrides: {
-  victory?: Victory | null;
-  handleMove?: (row: 0 | 1 | 2, column: 0 | 1 | 2) => void;
-}) {
-  return {
-    players,
-    currentPlayer: players[0],
-    moves: [],
-    board: EMPTY_BOARD(),
-    victory: null as Victory | null,
-    resetGame: jest.fn(),
-    handleMove: jest.fn(),
-    undoLastMove: jest.fn(),
-    canUndo: false,
-    ...overrides,
-  };
-}
 
 describe('unit tests for Tile component', () => {
 

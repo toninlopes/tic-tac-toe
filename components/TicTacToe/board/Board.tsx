@@ -8,7 +8,7 @@ import { Tile } from "./Tile";
 
 export function Board() {
   const navigation = useNavigation();
-  const { victory, resetGame, board, undoLastMove, canUndo } = useContext(TicTacToe.Context);
+  const { victory, resetGame, board, undoLastMove, canUndo, currentPlayer } = useContext(TicTacToe.Context);
 
   useEffect(() => {
     navigation.setOptions({
@@ -24,6 +24,9 @@ export function Board() {
 
   return (
     <>
+      <Text style={styles.currentPlayer}>
+        {`Current Player -> ${currentPlayer.symbol}`}
+      </Text>
       <View style={styles.container}>
         {board.map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
@@ -61,6 +64,10 @@ const styles = StyleSheet.create({
     borderColor: "lightgrey",
     borderRadius: 10,
     padding: 10,
+  },
+  currentPlayer: {
+    marginTop: 12,
+    textAlign: 'center'
   },
   row: {
     height: "33.33%",
