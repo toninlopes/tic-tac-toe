@@ -2,7 +2,7 @@ import { ThemedText } from "@/components/text/ThemedText";
 import { TicTacToe } from "@/modules";
 import { Board } from "@/modules/TicTacToe/types";
 import { Colors } from "@/styles/theme";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
 type TileProps = {
@@ -10,30 +10,34 @@ type TileProps = {
   coordinates: Board["Coordinates"];
 };
 
-export function Tile({ value = null, coordinates: [row, col] }: TileProps) {
-  const { handleMove, victory } = useContext(TicTacToe.Context);
-  const backgroundColor =
-    value === null
-      ? "#e0e0e0"
-      : victory?.evaluateTile([row, col])
-        ? "green"
-        : Colors.light.tint;
+export const Tile = React.memo(
+  ({ value = null, coordinates: [row, col] }: TileProps) => {
+    const { handleMove, victory } = useContext(TicTacToe.Context);
+    const backgroundColor =
+      value === null
+        ? "#e0e0e0"
+        : victory?.evaluateTile([row, col])
+          ? "green"
+          : Colors.light.tint;
 
-  const handlePress = () => {
-    if (!!value || !!victory) return;
-    handleMove(row, col);
-  };
+    const handlePress = () => {
+      if (!!value || !!victory) return;
+      handleMove(row, col);
+    };
 
-  return (
-    <Pressable
-      onPress={handlePress}
-      disabled={!!value || !!victory}
-      style={{ ...styles.container, backgroundColor }}
-    >
-      <ThemedText style={styles.text}>{value || ''}</ThemedText>
-    </Pressable>
-  );
-}
+    return (
+      <Pressable
+        onPress={handlePress}
+        disabled={!!value || !!victory}
+        style={{ ...styles.container, backgroundColor }}
+      >
+        <ThemedText style={styles.text}>{value || ''}</ThemedText>
+      </Pressable>
+    );
+  },
+);
+
+Tile.displayName = 'Tile';
 
 const styles = StyleSheet.create({
   container: {

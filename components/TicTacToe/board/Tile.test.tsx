@@ -1,7 +1,29 @@
+import { TicTacToe } from "@/modules";
+import { EMPTY_BOARD } from "@/modules/TicTacToe/constants";
 import { Player, Victory } from "@/modules/TicTacToe/types";
 import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 import { Tile } from "./Tile";
+
+const players = [new Player("1", "X"), new Player("2", "O")] as const;
+
+function createMockContextValue(overrides: {
+  victory?: Victory | null;
+  handleMove?: (row: 0 | 1 | 2, column: 0 | 1 | 2) => void;
+}) {
+  return {
+    players,
+    currentPlayer: players[0],
+    moves: [],
+    board: EMPTY_BOARD(),
+    victory: null as Victory | null,
+    resetGame: jest.fn(),
+    handleMove: jest.fn(),
+    undoLastMove: jest.fn(),
+    canUndo: false,
+    ...overrides,
+  };
+}
 
 describe('unit tests for Tile component', () => {
 
@@ -27,34 +49,35 @@ describe('unit tests for Tile component', () => {
   });
 
   test('should render the tile with when value is "X" and victory is true', () => {
-    jest.spyOn(React, 'useContext').mockReturnValue({
+    const value = createMockContextValue({
       victory: new Victory(new Player("1", "X"), [[0, 0], [1, 1], [2, 2]]),
-      handleMove: jest.fn(),
     });
 
-    const { getByText, toJSON } = render(<Tile value="X" coordinates={[1, 1]} />);
+    const { getByText, toJSON } = render(
+      <TicTacToe.Context.Provider value={value}>
+        <Tile value="X" coordinates={[1, 1]} />
+      </TicTacToe.Context.Provider>
+    );
 
     expect(getByText('X')).toBeTruthy();
     expect(toJSON()).toMatchSnapshot();
-
-    jest.spyOn(React, 'useContext').mockRestore();
   });
 
   test('should fire handleMove when the tile is pressed and value is null', () => {
     const handleMove = jest.fn();
-    jest.spyOn(React, 'useContext').mockReturnValue({
-      victory: null,
-      handleMove: handleMove,
-    });
+    const value = createMockContextValue({ victory: null, handleMove });
 
-    const { getByText } = render(<Tile value={null} coordinates={[1, 1]} />);
+    const { getByText } = render(
+      <TicTacToe.Context.Provider value={value}>
+        <Tile value={null} coordinates={[1, 1]} />
+      </TicTacToe.Context.Provider>
+    );
 
     act(() => {
       fireEvent.press(getByText(''));
     });
 
     expect(handleMove).toHaveBeenCalledTimes(1);
-
-    jest.spyOn(React, 'useContext').mockRestore();
+    expect(handleMove).toHaveBeenCalledWith(1, 1);
   });
 });
