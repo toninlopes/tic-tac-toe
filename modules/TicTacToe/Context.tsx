@@ -1,12 +1,14 @@
-import { createContext, useCallback, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
+import { useLocalSearchParams } from "expo-router";
 import { EMPTY_BOARD } from "./constants";
-import { Board, Move, Player, Victory } from "./types";
+import { minimax } from "./minmax";
+import { Board, Move, Player, PlayerType, Victory } from "./types";
 
-const initialPlayers = [new Player("1", "X"), new Player("2", "O")] as const;
+const initialPlayers = (mode?: PlayerType) => [new Player("1", "X", 'self'), new Player("2", "O", mode || 'friend')] as const;
 
 export const TicTacToeContext = createContext({
-  players: initialPlayers,
+  players: initialPlayers(),
   currentPlayer: null! as Player,
   moves: [] as Move[],
   board: EMPTY_BOARD() as Board["Value"],
@@ -22,7 +24,9 @@ export const TicTacToeContext = createContext({
 });
 
 export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
-  const [players] = useState(initialPlayers);
+  const screenProps = useLocalSearchParams();
+
+  const [players] = useState(initialPlayers(screenProps?.mode && screenProps.mode as PlayerType || undefined));
   const [moves, setMoves] = useState<Move[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState(players[0]);
   const [board, setBoard] = useState<Board["Value"]>(EMPTY_BOARD());
@@ -108,6 +112,18 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
     },
     [moves]
   );
+
+  useEffect(() => {
+    if (currentPlayer.who === 'computer') {
+      const nextBestMoviment = minimax.getBestMove(board, currentPlayer.symbol);
+      if (!nextBestMoviment) {
+        return;
+      }
+
+      const [row, column] = nextBestMoviment;
+      handleMove(row, column)
+    }
+  }, [currentPlayer])
 
   return (
     <TicTacToeContext.Provider

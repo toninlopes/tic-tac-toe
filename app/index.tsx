@@ -25,7 +25,18 @@ export default function HomeScreen() {
 
       <ButtonList
         buttons={[
-          { title: "Start Game", onPress: () => router.push("/board") },
+          {
+            title: "Play vs Friend", onPress: () => router.push({
+              pathname: "/board",
+              params: { mode: "friend" }
+            })
+          },
+          {
+            title: "Play vs Computer", onPress: () => router.push({
+              pathname: "/board",
+              params: { mode: "computer" }
+            })
+          },
         ]}
       />
     </ParallaxScrollView>

@@ -11,13 +11,17 @@ export interface Board {
   Value: [Tile["State"], Tile["State"], Tile["State"]][];
 }
 
+export type PlayerType = 'self' | 'friend' | 'computer'
+
 export class Player {
   id: string;
   symbol: NonNullable<Tile["Value"]>;
+  who?: PlayerType;
 
-  constructor(id: string, symbol: Tile["Value"]) {
+  constructor(id: string, symbol: Tile["Value"], who?: PlayerType) {
     this.id = id;
     this.symbol = symbol;
+    this.who = who;
   }
 }
 
