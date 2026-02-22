@@ -18,6 +18,7 @@ export const TicTacToeContext = createContext({
   ) => void,
   undoLastMove: null! as () => void,
   canUndo: null! as boolean,
+  isDraw: null! as boolean,
 });
 
 export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
@@ -36,6 +37,14 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
     () => moves.length !== 0 && moves.length !== 9 && victory === null,
     [moves, victory]
   );
+
+  /**
+   * Checks whether the game is draw or not.
+   */
+  const isDraw = useMemo(
+    () => Victory.predictDraw({ board }),
+    [board]
+  )
 
   const resetGame = () => {
     setMoves([]);
@@ -112,6 +121,7 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
         resetGame,
         undoLastMove,
         canUndo,
+        isDraw
       }}
     >
       {children}
