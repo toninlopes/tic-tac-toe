@@ -9,7 +9,16 @@ import { Tile } from "./Tile";
 
 export function Board() {
   const navigation = useNavigation();
-  const { victory, resetGame, board, undoLastMove, canUndo, currentPlayer, isDraw } = useContext(TicTacToe.Context);
+
+  const {
+    victory,
+    resetGame,
+    board,
+    undoLastMove,
+    canUndo,
+    currentPlayer,
+    isDraw,
+  } = useContext(TicTacToe.Context);
 
   useEffect(() => {
     navigation.setOptions({
