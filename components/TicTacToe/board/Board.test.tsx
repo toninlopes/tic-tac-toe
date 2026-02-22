@@ -50,7 +50,6 @@ describe('unit tests for Board component', () => {
         <Board />
       </TicTacToe.Context.Provider>
     );
-
     expect(toJSON()).toMatchSnapshot();
   });
 
@@ -64,7 +63,6 @@ describe('unit tests for Board component', () => {
         <Board />
       </TicTacToe.Context.Provider>
     );
-
     expect(toJSON()).toMatchSnapshot();
   });
 

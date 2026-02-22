@@ -4,6 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { EMPTY_BOARD } from "./constants";
 import { minimax } from "./minmax";
 import { Board, Move, Player, PlayerType, Victory } from "./types";
+import { useScore } from "./useScore";
 
 const initialPlayers = (mode?: PlayerType) => [new Player("1", "X", 'self'), new Player("2", "O", mode || 'friend')] as const;
 
@@ -26,7 +27,9 @@ export const TicTacToeContext = createContext({
 export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
   const screenProps = useLocalSearchParams();
 
-  const [players] = useState(initialPlayers(screenProps?.mode && screenProps.mode as PlayerType || undefined));
+  const [players] = useState(
+    initialPlayers(screenProps?.mode && screenProps.mode as PlayerType || undefined),
+  );
   const [moves, setMoves] = useState<Move[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState(players[0]);
   const [board, setBoard] = useState<Board["Value"]>(EMPTY_BOARD());
@@ -34,6 +37,8 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
     () => Victory.evaluateGame({ board, players }),
     [board, players]
   );
+  const scores = useScore();
+
   /**
    * Checks whether the game can have the last move undone or not.
    */
@@ -123,7 +128,13 @@ export function TicTacToeProvider({ children }: { children: React.ReactNode }) {
       const [row, column] = nextBestMoviment;
       handleMove(row, column)
     }
-  }, [currentPlayer])
+  }, [currentPlayer]);
+
+  useEffect(() => {
+    if (isDraw || victory) {
+      scores.storeGame(victory);
+    }
+  }, [isDraw, victory]);
 
   return (
     <TicTacToeContext.Provider
