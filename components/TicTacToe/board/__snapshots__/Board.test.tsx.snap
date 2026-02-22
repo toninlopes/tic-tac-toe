@@ -4,10 +4,23 @@ exports[`unit tests for Board component should render when the Board is empty 1`
 [
   <Text
     style={
-      {
-        "marginTop": 12,
-        "textAlign": "center",
-      }
+      [
+        {
+          "color": "#11181C",
+        },
+        {
+          "fontSize": 16,
+          "lineHeight": 24,
+        },
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        {
+          "marginTop": 12,
+          "textAlign": "center",
+        },
+      ]
     }
   >
     Current Player -&gt; X
@@ -705,7 +718,24 @@ exports[`unit tests for Board component should render when the Board is empty 1`
       ]
     }
   >
-    <Text>
+    <Text
+      style={
+        [
+          {
+            "color": "#11181C",
+          },
+          {
+            "fontSize": 16,
+            "lineHeight": 24,
+          },
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+        ]
+      }
+    >
       Undo
     </Text>
   </View>,
@@ -716,10 +746,23 @@ exports[`unit tests for Board component should render when the Board is full, bu
 [
   <Text
     style={
-      {
-        "marginTop": 12,
-        "textAlign": "center",
-      }
+      [
+        {
+          "color": "#11181C",
+        },
+        {
+          "fontSize": 16,
+          "lineHeight": 24,
+        },
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        {
+          "marginTop": 12,
+          "textAlign": "center",
+        },
+      ]
     }
   >
     Current Player -&gt; X
@@ -1435,7 +1478,24 @@ exports[`unit tests for Board component should render when the Board is full, bu
       ]
     }
   >
-    <Text>
+    <Text
+      style={
+        [
+          {
+            "color": "#11181C",
+          },
+          {
+            "fontSize": 16,
+            "lineHeight": 24,
+          },
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+        ]
+      }
+    >
       Undo
     </Text>
   </View>,
@@ -1446,10 +1506,23 @@ exports[`unit tests for Board component should render when the Board when X won 
 [
   <Text
     style={
-      {
-        "marginTop": 12,
-        "textAlign": "center",
-      }
+      [
+        {
+          "color": "#11181C",
+        },
+        {
+          "fontSize": 16,
+          "lineHeight": 24,
+        },
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        {
+          "marginTop": 12,
+          "textAlign": "center",
+        },
+      ]
     }
   >
     Current Player -&gt; X
@@ -2157,7 +2230,24 @@ exports[`unit tests for Board component should render when the Board when X won 
       ]
     }
   >
-    <Text>
+    <Text
+      style={
+        [
+          {
+            "color": "#11181C",
+          },
+          {
+            "fontSize": 16,
+            "lineHeight": 24,
+          },
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+        ]
+      }
+    >
       Undo
     </Text>
   </View>,

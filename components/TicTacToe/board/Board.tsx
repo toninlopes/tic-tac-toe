@@ -1,32 +1,33 @@
+import { ThemedText } from "@/components/text/ThemedText";
 import { TicTacToe } from "@/modules";
 import { Board as BoardType } from "@/modules/TicTacToe/types";
 import { Button } from "@react-navigation/elements";
 import { useNavigation } from "expo-router";
 import { useContext, useEffect } from "react";
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { Tile } from "./Tile";
 
 export function Board() {
   const navigation = useNavigation();
-  const { victory, resetGame, board, undoLastMove, canUndo, currentPlayer } = useContext(TicTacToe.Context);
+  const { victory, resetGame, board, undoLastMove, canUndo, currentPlayer, isDraw } = useContext(TicTacToe.Context);
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: !victory
-        ? undefined
-        : () => (
+      headerRight: (victory || isDraw)
+        ? () => (
           <Button variant="plain" onPress={resetGame}>
             Reset
           </Button>
-        ),
+        )
+        : undefined,
     });
   }, [victory, resetGame, navigation]);
 
   return (
     <>
-      <Text style={styles.currentPlayer}>
+      <ThemedText style={styles.currentPlayer}>
         {`Current Player -> ${currentPlayer.symbol}`}
-      </Text>
+      </ThemedText>
       <View style={styles.container}>
         {board.map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
@@ -48,8 +49,11 @@ export function Board() {
         disabled={!canUndo}
         onPress={undoLastMove}
       >
-        <Text>Undo</Text>
+        <ThemedText>Undo</ThemedText>
       </Pressable>
+      {isDraw && (
+        <ThemedText style={styles.drawText}>The match has drawn.</ThemedText>
+      )}
     </>
   );
 }
@@ -86,5 +90,8 @@ const styles = StyleSheet.create({
   },
   disabledUndoButton: {
     opacity: .4,
+  },
+  drawText: {
+    textAlign: 'center',
   },
 });

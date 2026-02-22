@@ -116,4 +116,66 @@ describe('unit tests for Victory class', () => {
     expect(victory?.evaluateTile([1, 2])).toBeFalsy();
     expect(victory?.evaluateTile([2, 1])).toBeFalsy();
   });
+
+  test('predictDraw should return false when there is a chance for victory condition', () => {
+    const p1 = new Player("1", "X");
+    const p2 = new Player("2", "O");
+
+    const boards_with_change_for_victory = [
+      // First board
+      [
+        [p1.symbol, null, p2.symbol],
+        [null, p1.symbol, p2.symbol],
+        [null, null, null],
+      ] as Board["Value"],
+      // Second board
+      [
+        [p1.symbol, p2.symbol, p1.symbol],
+        [p2.symbol, p2.symbol, null],
+        [null, null, p1.symbol],
+      ] as Board["Value"],
+      // Second board
+      [
+        [p2.symbol, p1.symbol, p1.symbol],
+        [null, p2.symbol, null],
+        [null, null, p1.symbol],
+      ] as Board["Value"],
+    ];
+
+    boards_with_change_for_victory.forEach(board => {
+      const isDrawPredicted = Victory.predictDraw({
+        board,
+      });
+
+      expect(isDrawPredicted).toBeFalsy();
+    });
+  });
+
+  test('predictDraw should return true when there is no chance for victory condition', () => {
+    const p1 = new Player("1", "X");
+    const p2 = new Player("2", "O");
+
+    const boards_with_no_change_for_victory = [
+      // First board
+      [
+        [p1.symbol, p1.symbol, p2.symbol],
+        [p2.symbol, p2.symbol, p1.symbol],
+        [p1.symbol, p2.symbol, null],
+      ] as Board["Value"],
+      // Second board
+      [
+        [p1.symbol, p2.symbol, p1.symbol],
+        [null, p1.symbol, null],
+        [p2.symbol, p1.symbol, p2.symbol],
+      ] as Board["Value"],
+    ];
+
+    boards_with_no_change_for_victory.forEach(board => {
+      const isDrawPredicted = Victory.predictDraw({
+        board,
+      });
+
+      expect(isDrawPredicted).toBeTruthy();
+    });
+  });
 });
