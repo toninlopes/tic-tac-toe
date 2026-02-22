@@ -11,7 +11,8 @@ export function createMockContextValue(overrides: {
   victory?: Victory | null;
   handleMove?: (row: 0 | 1 | 2, column: 0 | 1 | 2) => void;
   moves?: Move[];
-  board?: Board["Value"],
+  board?: Board["Value"];
+  isDraw?: boolean;
 }) {
   return {
     currentPlayer: players[0],
@@ -23,6 +24,7 @@ export function createMockContextValue(overrides: {
     resetGame: jest.fn(),
     handleMove: jest.fn(),
     undoLastMove: jest.fn(),
+    isDraw: false,
     ...overrides,
   };
 }
