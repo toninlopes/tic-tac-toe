@@ -4,6 +4,13 @@ import { Board } from "@/modules/TicTacToe/types";
 import { Colors } from "@/styles/theme";
 import React, { useContext } from "react";
 import { Pressable, StyleSheet } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+const OFFSET = 10;
+const TIME = 200;
+const DELAY = 200;
 
 type TileProps = {
   value: null | "X" | "O";
@@ -20,19 +27,43 @@ export const Tile = React.memo(
           ? "green"
           : Colors.light.tint;
 
+    const offset = useSharedValue<number>(0);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ translateX: offset.value }],
+    }));
+
+    if (backgroundColor === "green") {
+      offset.value = withDelay(
+        DELAY,
+        withSequence(
+          // start from -OFFSET
+          withTiming(-OFFSET, { duration: TIME / 2 }),
+          // shake between -OFFSET and OFFSET 5 times
+          withRepeat(withTiming(OFFSET, { duration: TIME }), 5, true),
+          // go back to 0 at the end
+          withTiming(0, { duration: TIME / 2 })
+        )
+      );
+    }
+
     const handlePress = () => {
       if (!!value || !!victory) return;
       handleMove(row, col);
     };
 
     return (
-      <Pressable
+      <AnimatedPressable
         onPress={handlePress}
         disabled={!!value || !!victory}
-        style={{ ...styles.container, backgroundColor }}
+        style={[
+          styles.container,
+          { backgroundColor },
+          animatedStyle,
+        ]}
       >
         <ThemedText style={styles.text}>{value || ''}</ThemedText>
-      </Pressable>
+      </AnimatedPressable>
     );
   },
 );
