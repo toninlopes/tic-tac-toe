@@ -32,13 +32,15 @@ export default function HomeScreen() {
             title: "Play vs Friend", onPress: () => router.push({
               pathname: "/board",
               params: { mode: "friend" }
-            })
+            }),
+            accessibilityLabel: "This is a button. It is labeled Play vs Friend. When you press it, you can play against a friend."
           },
           {
             title: "Play vs Computer", onPress: () => router.push({
               pathname: "/board",
               params: { mode: "computer" }
-            })
+            }),
+            accessibilityLabel: "This is a button. It is labeled Play vs Computer. When you press it, you can play against the computer."
           },
         ]}
       />
@@ -48,10 +50,12 @@ export default function HomeScreen() {
           Scoreboard
         </ThemedText>
       </ThemedView>
-      <ThemedText>{`X wins: ${score.X}`}</ThemedText>
-      <ThemedText>{`O wins: ${score.O}`}</ThemedText>
-      <ThemedText>{`Draws: ${score.draw}`}</ThemedText>
+      <ThemedText accessibilityLabel={"This is a label for X wins: " + score.X}>{`X wins: ${score.X}`}</ThemedText>
+      <ThemedText accessibilityLabel={"This is a label for O wins: " + score.O}>{`O wins: ${score.O}`}</ThemedText>
+      <ThemedText accessibilityLabel={"This is a label for Draws: " + score.draw}>{`Draws: ${score.draw}`}</ThemedText>
       <Pressable
+        accessible={true}
+        accessibilityLabel="This is a button. It is labeled Reset Scores. When you press it, it resets the scores to zero."
         style={styles.clearButton}
         onPress={resetScores}
       >

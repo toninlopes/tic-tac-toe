@@ -62,3 +62,26 @@ describe('unit tests for Tile component', () => {
     expect(handleMove).toHaveBeenCalledWith(1, 1);
   });
 });
+
+describe('unit tests for Tile accessibility', () => {
+  test('should have the correct accessibility label when value is null', () => {
+    const { getByLabelText } = render(<Tile value={null} coordinates={[0, 0]} />);
+
+    const button = getByLabelText('This is a tile on column 1 and row 1. It is labeled empty.');
+    expect(button).toBeTruthy();
+  });
+
+  test('should have the correct accessibility label when value is "X"', () => {
+    const { getByLabelText } = render(<Tile value="X" coordinates={[1, 1]} />);
+
+    const button = getByLabelText('This is a tile on column 2 and row 2. It is labeled X.');
+    expect(button).toBeTruthy();
+  });
+
+  test('should have the correct accessibility label when value is "O"', () => {
+    const { getByLabelText } = render(<Tile value="O" coordinates={[2, 2]} />);
+
+    const button = getByLabelText('This is a tile on column 3 and row 3. It is labeled O.');
+    expect(button).toBeTruthy();
+  });
+});

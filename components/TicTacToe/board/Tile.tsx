@@ -62,7 +62,12 @@ export const Tile = React.memo(
           animatedStyle,
         ]}
       >
-        <ThemedText style={styles.text}>{value || ''}</ThemedText>
+        <ThemedText
+          accessible={true}
+          accessibilityLabel={`This is a tile on column ${col + 1} and row ${row + 1}. It is labeled ${value || 'empty'}.`}
+          style={styles.text}>
+          {value || ''}
+        </ThemedText>
       </AnimatedPressable>
     );
   },
