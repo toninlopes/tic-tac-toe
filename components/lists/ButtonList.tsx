@@ -18,6 +18,7 @@ type Button = {
   icon?: ButtonIcon;
   title: string;
   onPress: () => void;
+  accessibilityLabel?: string;
 };
 
 type Props = {
@@ -37,6 +38,8 @@ export function ButtonList({ buttons = [] }: Props) {
     >
       {buttons.map(({ icon, ...button }) => (
         <Pressable
+          accessible={true}
+          accessibilityLabel={button.accessibilityLabel || `This is a button. It is labeled ${button.title}.`}
           key={button.title}
           onPress={button.onPress}
           style={({ pressed }) => [
